@@ -1,0 +1,54 @@
+# create a map
+library(leaflet)
+
+# Ancient
+pyramid <- c(29.97416777, 31.1339477975)
+gardens <- c(32.478476, 44.441039)
+zeus <- c(37.6379, 21.6300)
+temple <- c(37.9498, 27.3639)
+mausoleum <- c(37.0381, 27.4244)
+rhodi <- c(36.4349631, 28.081913)
+lighthouse <- c(31.15458, 29.84587)
+
+dat <- rbind(pyramid, gardens, zeus, temple, mausoleum, rhodi, lighthouse)
+colnames(dat) <- c("latitude", "longitude")
+dat
+
+# New
+jesus <- c(-22.9519, -43.2105)
+tajmahal <- c(27.1750, 78.0422)
+MachuPicchu <- c(-13.1631, -72.5450)
+ChichenItza <- c(20.6843, -88.5678)
+Colosseum <- c(41.8902, 12.4922)
+Petra <- c(30.3285, 35.4444)
+GreatWall <- c(40.4319, 116.5704)
+
+dat <- rbind(dat,jesus,tajmahal,MachuPicchu,ChichenItza,Colosseum, Petra, GreatWall)
+
+dat <- data.frame(dat, Time = c(rep("Ancient",7),rep("New",7)))
+dat
+pal <- colorFactor(c("red", "green"), domain = c("Ancient", "New"))
+
+# add name to popup plus links
+Wonders <- c(
+      "<a href='http://en.wikipedia.org/wiki/Great_Pyramid_of_Giza'>Great Pyramid of Giza</a>",
+      "<a href='http://en.wikipedia.org/wiki/Hanging_Gardens_of_Babylon'>Hanging Gardens of Babylon</a>",
+      "<a href='http://en.wikipedia.org/wiki/Temple_of_Artemis'>Temple of Artemis</a>",
+      "<a href='http://en.wikipedia.org/wiki/Statue_of_Zeus_at_Olympia'>Statue of Zeus at Olympia</a>",
+      "<a href='http://en.wikipedia.org/wiki/Mausoleum_at_Halicarnassus'>Mausoleum at Halicarnassus</a>",
+      "<a href='http://en.wikipedia.org/wiki/Colossus_of_Rhodes'>Colossus of Rhodes</a>",
+      "<a href='http://en.wikipedia.org/wiki/Lighthouse_of_Alexandria'>Lighthouse of Alexandria</a>",
+      "<a href='http://en.wikipedia.org/wiki/Christ_the_Redeemer_(statue)'>Christ the Redeemer</a>",
+      "<a href='http://en.wikipedia.org/wiki/Taj_Mahal'>Taj Mahal</a>",
+      "<a href='http://en.wikipedia.org/wiki/Machu_Picchu'>Machu Picchu</a>",
+      "<a href='http://en.wikipedia.org/wiki/Chichen_Itza'>Chichen Itza</a>",
+      "<a href='http://en.wikipedia.org/wiki/Colosseum'>The Colosseum</a>",
+      "<a href='http://en.wikipedia.org/wiki/Petra'>Petra</a>",
+      "<a href='http://en.wikipedia.org/wiki/Great_Wall_of_China'>Great Wall of China</a>"
+)
+
+dat %>% leaflet() %>% addTiles() %>% 
+      addCircleMarkers(lng = ~longitude, lat = ~latitude, popup = Wonders,
+                       color = ~pal(Time),
+                       stroke = FALSE, fillOpacity = 1,
+                       radius = ~4)
