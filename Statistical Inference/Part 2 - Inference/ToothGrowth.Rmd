@@ -1,0 +1,105 @@
+---
+title: "Effect of Vitamin C on Tooth Length"
+author: "Chiara Di Gravio"
+date: "17 August 2016"
+output: pdf_document
+fontsize: 10pt
+geometry: margin=0.6in
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Synopsis
+
+Vitamin C was given to 60 guinea pigs and their tooth length was measured. Each animal received one of three dose levels of vitamin C (0.5, 1, and 2 mg/day) by one of two delivery methods (orange juice OJ or ascorbic acid VC). 
+
+In this project we used a series of two sample t-tests to compare tooth length by delivery method and dose. Results were considered statistically significant if p-value < 0.05. We concluded that mean tooth length differed between dose levels, but it did not differ between different vitamin C supplementation delivery modes.
+
+## Assumptions Needed for the Analysis
+
+Two-tailed t-test was used to carry out the required comparisons. The following assumptions were made:
+
+- Guinea pigs in the study were sampled independently, i.e. there was no overlap between group members.
+
+- Population variances were unequal.
+
+- Sample size was large enough; hence, by the Central Limit Theorem we could assume that the distribution of the two sample means being tested is approximately Normal.
+
+## Exploratory Data Analysis
+
+We loaded the data and transformed the dose variable from numeric to factor to simplify the analysis that follows:
+
+```{r, message=FALSE, warning=FALSE}
+library(knitr)
+
+data(ToothGrowth)
+str(ToothGrowth)
+
+# transform dose into a factor
+ToothGrowth$dose <- as.factor(ToothGrowth$dose)
+```
+
+For each variable, we computed summary statistics (if the variable is continuous) or we looked at each category frequency (if the variable is categorical):
+
+```{r}
+summary(ToothGrowth)
+```
+
+Graphical analysis revealed that median tooth length was higher when vitamin C was delivered through orange juice (OJ), and that tooth length increased with increasing dosage of vitamin C:   
+
+```{r, align = "center", fig.height=8.5}
+par(mfrow = c(2,1))
+with(ToothGrowth, boxplot(len ~ supp, main = "Tooth Length According to Supplement",
+     xlab = "supplement type", ylab = "length"))
+with(ToothGrowth, boxplot(len ~ dose, main = "Tooth Length According to Dose",
+     xlab = "dose", ylab = "length"))
+```
+
+## Results
+
+#### Tooth Length by Supplement Delivery 
+
+We tested whether there is no difference between mean tooth length of guinea pigs whose vitamin C supplementation was delivered through orange juice and mean tooth length of guinea pigs whose vitamin C supplementation was delivered through ascorbic acid: 
+
+```{r, results='asis'}
+t1 <- with(ToothGrowth, t.test(len ~ supp, var.equal = F))
+myvect <- round(c(t1$estimate[1] - t1$estimate[2], t1$conf.int,t1$p.value),3)
+names(myvect) <- c("Estimated Difference", "95%CI Lower Bound", "95%CI Upper Bound", "p-value")
+kable(t(myvect), caption = "T-test Results")
+```
+
+As the p-value is greater than 0.05 we failed to reject the null hypotesis; hence, mean tooth length did not differ between different vitamin C supplementation delivery modes.
+
+#### Tooth Length by Supplement Dose  
+
+As supplement dose had 3 possible levels, we run three separate t-tests to compare two doses at the time. Specifically, the following hypothesis were tested:
+
+1. There is no difference between mean tooth length of guinea pigs who received 0.5 mg of vitamin C and mean tooth length of guinea pigs who received 1 mg of vitamin C.
+
+2. There is no difference between mean tooth length of guinea pigs who received 1 mg of vitamin C and mean tooth length of guinea pigs who received 2 mg of vitamin C.
+
+3. There is no difference between mean tooth length of guinea pigs who received 0.5 mg of vitamin C and mean tooth length of guinea pigs who received 1 mg of vitamin C.
+
+```{r}
+# 0.5 vs 1
+t1 <- with(subset(ToothGrowth, dose != "2"), t.test(len ~ dose, var.equal = F))
+myvect1 <- round(c(t1$estimate[1] - t1$estimate[2],t1$conf.int,t1$p.value),3)
+names(myvect1) <- c("Estimated Difference", "95%CI Lower Bound", "95%CI Upper Bound", "p-value")
+# 1 vs 2
+t2 <- with(subset(ToothGrowth, dose != "0.5"), t.test(len ~ dose, var.equal = F))
+myvect2 <- round(c(t2$estimate[1] - t2$estimate[2],t2$conf.int,t2$p.value),3)
+# 0.5 vs 2
+t3 <- with(subset(ToothGrowth, dose != "1"), t.test(len ~ dose, var.equal = F))
+myvect3 <- round(c(t3$estimate[1] - t3$estimate[2],t3$conf.int,t3$p.value),3)
+myvect <- rbind(myvect1, myvect2, myvect3)
+row.names(myvect) <- c("0.5 vs 1 mg", "1 vs 2 mg", "0.5 vs 2 mg")
+kable(myvect, caption = "T-test Results")
+```
+
+In all three cases, as p-value < 0.05 we rejected the null hypothesis; hence, there was a difference between mean tooth length of guinea pigs depending vitamin C dose received. Looking at the estimated differences and at the 95% confidence intervals in Table 2, we could conclude that increases in vitamin C dose were associated with increased tooth length.
+
+## Reference
+
+- Dataset description: https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/ToothGrowth.html

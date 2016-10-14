@@ -1,0 +1,110 @@
+---
+title: 'Motor Trend: Association between Transmission and MPG'
+author: "Chiara Di Gravio"
+date: "25 August 2016"
+output: pdf_document
+geometry: margin = 0.38in
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Executive Summary
+
+- The association between car transmission type and miles per gallon (MPG) was studied using multiple regression models. An unadjusted analysis with transmission type as the only predictor was fit. 
+
+- To account for possible confounding and to select the "best" model, we fit a full model (with all the variables in the dataset as predictors) and used a stepwise procedure to select the model that minimises the AIC. The resulting model includes transmission type (am), weight (wt) and 1/4 mile time (qsec).
+
+- After adjustments, the "best" model showed that manual cars had (on average) 2.94 miles per gallon more than automatic cars (95% confidence interval: 0.05 - 5.83, pvalue = 0.046).
+
+- Diagnostic plot were generated and leverage points were studied. The "best" model was again fitted after excluding high leverage points and the association between transmission type and MPG became not significnat (estimate: 2.20, 95% CI: -0.45 - 4.84, pvalue = 0.12).
+
+
+
+## Exploratory Data Analysis
+
+The dataset comprised of `r nrow(mtcars)` cars. For each car, `r ncol(mtcars)` variables were collected.
+ 
+```{r, message=FALSE, warning=FALSE}
+# load packages
+library(ggplot2)
+library(gridExtra)
+library(knitr)
+
+# import dataset and transform variables to factors
+data(mtcars)
+mtcars$cyl <- factor(mtcars$cyl); mtcars$vs <- factor(mtcars$vs)
+mtcars$am <- factor(mtcars$am); levels(mtcars$am) <- c("Automatic", "Manual")
+```
+
+Of the 32 cars, 19 were automatic and 13 were manual. The mean MPG was 20.1 (SD: 6.03). Tables 1 and 2 summarises the results.
+
+```{r, message=FALSE, warning=FALSE}
+kable(as.data.frame(table(mtcars$am)), caption = "Frequency of Transmission Type",
+      col.names = c("Type", "Frequency"))
+kable(t(c(summary(mtcars$mpg), SD = sd(mtcars$mpg))), caption = "MPG Summary Statistics")
+```
+
+From a short graphical analysis (see Appendix) manual cars seemed to have higher MPG. However, the variablity of MPG seemed higher for manual than for automatic cars.
+
+## Regression Models
+
+First, a regression model with only transmission type as predictor was implemented:
+
+```{r}
+mod1 <- lm(mpg ~ am, data = mtcars)
+kable(round(cbind(summary(mod1)$coeff, confint(mod1)),3), caption = "Unadjusted Analysis Results",
+      col.names=c("Estimate", "Std. Error", "t value","p-value", "95% CI: LB","95% CI: UB"))
+```
+
+Then, to consider the presence of possible confounders and to select the best model based on the one AIC criteria, a full model (one with all the predictors) was fit, and a stepwise procedure was implemented to select the "best" model.
+
+```{r}
+# full model
+fullmod <- lm(mpg ~ ., data = mtcars)
+# stepwise selection
+bestmod <- step(fullmod, scope = mod1, direction = "both", trace = FALSE)
+kable(round(cbind(summary(bestmod)$coeff, confint(bestmod)),3), caption = "Best Model Results",
+      col.names=c("Estimate", "Std. Error", "t value","p-value", "95% CI: LB","95% CI: UB"))
+```
+
+Holding the weight and the 1/4 mile time variables constant, transmission type was significantly assiciated with MPG. The MPG in manual cars was (on average) 2.94 (95% CI: 0.05, 5.83) more when compared to automatic cars. 
+
+Model diagnostic (see appendix for graphs), carried out using residual plot and QQplot of the residual, showed that linear regression hypothesis are mostly satisfied with no evident pattern in the residual plot and residual being fairly normally distributed. Further investigation might be due to better understand whether the linear regression model was appropriate. The model diagnostic plots identied three points of interest:
+
+```{r}
+tocheck <- c("Chrysler Imperial", "Fiat 128", "Toyota Corolla")
+mtcars$leverage <- hat(model.matrix(bestmod))
+kable(mtcars[rownames(mtcars) %in% tocheck,])
+```
+
+Using as cut-off for high leverage point $2 \times p/n = 0.1875$ (p: number of variables, n: number of observations), only Chrysler Imperial could be considered a point of high leverage. After excluding the high leverage point, the stepwise procedure identified the same "best" model; however, the association between transmission type and MPG became not significant (see Appendix).
+
+## Appendix
+
+### Exploratory Data Analysis: MPG Distribution and MPG Boxplots according to Transmission Type
+
+```{r, fig.width=7, fig.height = 3}
+p1 <- ggplot(mtcars, aes(x = mpg)) + 
+      geom_histogram(colour = "black", fill = "white", binwidth = 3.5) +
+      theme_bw() + xlab("MPG") + ylab("Frequency") + ggtitle("MPG Histogram")
+p2 <- ggplot(mtcars, aes(x = am, y = mpg)) + geom_boxplot() + theme_bw() +
+      xlab("Transmission Type") + ylab("MPG") + ggtitle("MPG according to Transmission")
+grid.arrange(p1, p2, ncol = 2)
+```
+
+### Linear Regression: Diagnostic Plot
+
+```{r}
+par(mfrow=c(2,2))
+plot(bestmod)
+```
+
+### Excluding leverage point
+
+```{r}
+fullmod <- lm(mpg ~ ., data = mtcars[rownames(mtcars) != "Chrysler Imperial",])
+bm <- step(fullmod, scope = mod1, direction = "both", trace = FALSE)
+summary(bm)
+```
