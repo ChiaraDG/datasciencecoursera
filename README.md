@@ -15,3 +15,5 @@ The repository contains work done as part of the John Hopkin's Data Science Spec
 - [Regression Models](https://github.com/ChiaraDG/datasciencecoursera/tree/master/Regression%20Models)
 
 - [Practical Machine Learning](https://github.com/ChiaraDG/datasciencecoursera/tree/master/Practical%20Machine%20Learning)
+
+- [Developing Data Products](https://github.com/ChiaraDG/datasciencecoursera/tree/master/Developing%20Data%20Products)
