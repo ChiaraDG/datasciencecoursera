@@ -14,7 +14,7 @@ knitr::opts_chunk$set(root.dir = "./Developing Data Products/Playing with Plotly
 
 - The data is taken from the [Kaggle](https://www.kaggle.com/datasets) website.
 
-- The data contains nutrition facts from different foo sources.
+- The data contains nutrition facts from different food sources.
 
 - The 10 more represented countries in the data (Australia, Belgium, France, Germany, Italy, Portugal, Spain, Switzerland, United Kingdom and United States) are chosen and a detailed analysis is performed. 
 

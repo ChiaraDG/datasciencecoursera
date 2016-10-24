@@ -2,7 +2,7 @@
 library(dplyr)
 library(plotly)
 library(rworldmap)
-dat <- read.csv("./Developing Data Products/FoodFacts.csv")
+dat <- read.csv("./Developing Data Products/Playing with Plotly/FoodFacts.csv")
 
 # Keep only the needed variables
 keep <- c("countries_en", "fat_100g", "sugars_100g", "salt_100g","energy_100g", "main_category_en","nutrition_score_uk_100g")
