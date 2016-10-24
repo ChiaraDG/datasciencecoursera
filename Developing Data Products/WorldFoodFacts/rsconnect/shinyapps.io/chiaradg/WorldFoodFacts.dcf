@@ -1,0 +1,11 @@
+name: WorldFoodFacts
+title:
+account: chiaradg
+server: shinyapps.io
+appId: 133557
+bundleId: 595334
+url: https://chiaradg.shinyapps.io/WorldFoodFacts/
+when: 1477334529.07227
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: World Food Facts.Rpres|World Food Facts.md|data cleaning.R|World Food Facts-figure/unnamed-chunk-2-1.png
