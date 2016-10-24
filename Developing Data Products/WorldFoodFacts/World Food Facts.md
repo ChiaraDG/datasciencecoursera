@@ -16,7 +16,7 @@ The Data
 
 - The 10 more represented countries in the data (Australia, Belgium, France, Germany, Italy, Portugal, Spain, Switzerland, United Kingdom and United States) are chosen and a detailed analysis is performed. 
 
-- The code used to clean the data can be found [here](add link)
+- The code used to clean the data can be found [here](https://github.com/ChiaraDG/datasciencecoursera/blob/master/Developing%20Data%20Products/WorldFoodFacts/data%20cleaning.R)
 
 
 A Peak into the Data
@@ -53,8 +53,6 @@ The Shiny App
 The App and the Code
 ========================================================
 
-- The App can be found [here]()
+- The App can be found [here](https://chiaradg.shinyapps.io/WorldFoodFacts/)
 
-- The App was generated using two file: [ui.R]() and [server.R]()
-
-- Here is a preview of what you can find:
+- The App was generated using two file: [ui.R](https://github.com/ChiaraDG/datasciencecoursera/blob/master/Developing%20Data%20Products/WorldFoodFacts/ui.R) and [server.R](https://github.com/ChiaraDG/datasciencecoursera/blob/master/Developing%20Data%20Products/WorldFoodFacts/server.R)
