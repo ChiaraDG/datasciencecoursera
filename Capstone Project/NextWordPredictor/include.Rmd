@@ -1,0 +1,40 @@
+---
+title: "Next Word Predictor"
+output: 
+  html_document: 
+    keep_md: yes
+    self_contained: no
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The following document explains (briefly) the problem the app is trying to solve and the algorithm used. Links to further reference are given. A link to the Github repository containing the code used for analysing the data and generating the app is provided at the end of the document.
+
+### The Data
+
+SwiftKey builds smart keyboard that makes it easier for people to type on their mobile phone. The idea is to use predictive text models; hence, if a use type:
+
+*There is a*
+
+the keyboard will three options for what the next word might be. To be able to build a predictive model, a series of sentences from Twitter, news and blogs were downloaded (all sentences were in English) and used to build a corpus. The exploratory analysis of the available data can be found [here](https://rpubs.com/chiaradg/228725).
+
+### The Method: Stupid Back-off Algorithm
+
+Different methods can be used for text prediction. Here we used the stupid back-off algorithm as it was not computationally intensive and could give results quickly. Other methods might lead to a better prediction accuracy, in the section further references we provided links to different methodologies.
+
+The stupid back-off algorithm is an n-grams language model that assigns the probability of a word contioned on  previous words. The main idea of the stupid back-off algorithm is to look at a higher order n-grmas, if this has zero count, we then look at the lower order n-grams, and we continue this procedures until we get the most common words. 
+
+The back-off does not produce normalised probabilities but uses relative frequencies assigned to each word.
+
+### References: stupid back-off and other models
+
+- [Large language models in machine translation](http://www.aclweb.org/anthology/D07-1090.pdf)
+
+- [Language modelling with n-grams](https://web.stanford.edu/~jurafsky/slp3/4.pdf)
+
+### Link to the Github Repository
+
+Code to explore the data and generate the app can be found [here](ADD LINK).
