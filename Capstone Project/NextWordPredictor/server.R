@@ -128,7 +128,7 @@ shinyServer(function(input, output) {
                           coord_flip() + ylab("Score") + ggtitle("Most Likely Words") + xlab("")
               } else {
                     # most probable words
-                    ggplot(ngramsdat1[1:50,], aes(x = reorder(word, frequency), y = frequency)) + 
+                    ggplot(ngramsdat1[1:20,], aes(x = reorder(word, frequency), y = frequency)) + 
                           geom_bar(stat = "identity", color = "white", fill="blue") + theme_bw() +
                           coord_flip() + ylab("Frequency") + ggtitle("Most Frequent Words") + xlab("")
               }

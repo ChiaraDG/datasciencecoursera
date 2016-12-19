@@ -25,7 +25,7 @@ the keyboard will three options for what the next word might be. To be able to b
 
 Different methods can be used for text prediction. Here we used the stupid back-off algorithm as it was not computationally intensive and could give results quickly. Other methods might lead to a better prediction accuracy, in the section further references we provided links to different methodologies.
 
-The stupid back-off algorithm is an n-grams language model that assigns the probability of a word contioned on  previous words. The main idea of the stupid back-off algorithm is to look at a higher order n-grmas, if this has zero count, we then look at the lower order n-grams, and we continue this procedures until we get the most common words. 
+The stupid back-off algorithm is an n-grams language model that assigns the probability of a word conditioned on  previous words. The main idea of the stupid back-off algorithm is to look at a higher order n-grmas, if this has zero count, we then look at the lower order n-grams, and we continue this procedures until we get the most common words. 
 
 The back-off does not produce normalised probabilities but uses relative frequencies assigned to each word.
 
