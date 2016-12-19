@@ -37,4 +37,4 @@ The back-off does not produce normalised probabilities but uses relative frequen
 
 ### Link to the Github Repository
 
-Code to explore the data and generate the app can be found [here](ADD LINK).
+Code to explore the data and generate the app can be found [here](https://github.com/ChiaraDG/datasciencecoursera/tree/master/Capstone%20Project/NextWordPredictor).
